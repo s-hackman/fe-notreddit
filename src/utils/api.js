@@ -20,3 +20,10 @@ export const getArticleById = (article_id) => {
     return res.data.article;
   });
 };
+
+//Comments
+export const getArticleComments = (article_id) => {
+  return baseApi.get(`/articles/${article_id}/comments`).then((res) => {
+    return res.data.comments;
+  });
+};
