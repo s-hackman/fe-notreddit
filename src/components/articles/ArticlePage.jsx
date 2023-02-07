@@ -17,6 +17,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
 import { motion } from "framer-motion";
 import ArticleComments from "./comments/ArticleComments.jsx";
+import PopUpMessage from "../layout/PopUpMessage.jsx";
 
 const ArticlePage = () => {
   const [articleInfo, setArticleInfo] = useState([]);
@@ -24,6 +25,9 @@ const ArticlePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { article_id } = useParams();
   const [votes, setVotes] = useState(0);
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [failure, setFailure] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,12 +46,21 @@ const ArticlePage = () => {
     setErr(null);
     patchArticleVotes(article_id, inc_votes)
       .then((article) => {
+        setSuccess(true);
+        if (inc_votes > 0) {
+          setMessage("You Upvoted the Article! 👍");
+        } else {
+          setMessage("You Downvoted the Article! 👎");
+        }
         setArticleInfo(article);
       })
       .catch((err) => {
-        setErr(err.message);
+        setFailure(true);
+        setMessage("Something went wrong");
         setVotes(votes - inc_votes);
       });
+    setSuccess(false);
+    setFailure(false);
   };
 
   return (
@@ -108,6 +121,8 @@ const ArticlePage = () => {
               </Button>
             </CardActions>
           </Card>
+          {success && <PopUpMessage message={message} />}
+          {failure && <PopUpMessage message={message} failure={failure} />}
           <ArticleComments />
         </section>
       )}
