@@ -37,3 +37,18 @@ export const getArticleComments = (article_id) => {
     return res.data.comments;
   });
 };
+
+export const postCommentByArticleId = (article_id, username, newComment) => {
+  return baseApi
+    .post(`/articles/${article_id}/comments`, { username, body: newComment })
+    .then((res) => {
+      return res.data["comment added"];
+    });
+};
+
+//Users
+export const getUsers = () => {
+  return baseApi.get("/users").then((res) => {
+    return res.data.users;
+  });
+};
