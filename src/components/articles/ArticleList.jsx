@@ -8,15 +8,18 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import ArticleIcon from "@mui/icons-material/Article";
+import SelectOptions from "../layout/SelectOptions";
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState(null);
+  const [sortBy, setSortBy] = useState("created_at");
+  const [order, setSortOrder] = useState("desc");
 
   useEffect(() => {
     setIsLoading(true);
-    getArticles()
+    getArticles(order, sortBy)
       .then((articles) => {
         setArticles(articles);
         setIsLoading(false);
@@ -24,7 +27,7 @@ const ArticleList = () => {
       .catch((err) => {
         setErr(err.message);
       });
-  }, []);
+  }, [sortBy, order]);
   return (
     <>
       {err && <Error />}
@@ -42,15 +45,22 @@ const ArticleList = () => {
                   <ArticleIcon edge="start" />
                   All Articles
                 </Typography>
+                <SelectOptions
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  order={order}
+                  setSortOrder={setSortOrder}
+                />
               </Toolbar>
             </AppBar>
           </Box>
-          <Stack className="articles-container">
-            {articles.map((article) => (
+          <Stack className="articles-container" sx={{ px: 2 }}>
+            {articles.map((article, time) => (
               <ArticleListItem
                 key={article.article_id}
                 article={article}
                 setArticles={setArticles}
+                time={time}
               />
             ))}
           </Stack>
