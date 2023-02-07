@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import UserContext from "../../../context/usercontext.js";
 import { useParams } from "react-router-dom";
-import { getArticleComments } from "../../../utils/api.js";
+import { getArticleComments, deleteCommentById } from "../../../utils/api.js";
 import Error from "../../Error.jsx";
 import {
   Card,
@@ -17,6 +17,8 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { motion } from "framer-motion";
 import AddComment from "./AddComment.jsx";
+import PopUpMessage from "../../layout/PopUpMessage";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,6 +34,9 @@ const ArticleComments = () => {
   const [err, setErr] = useState(null);
   const { article_id } = useParams();
   const { loginUser } = useContext(UserContext);
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [failure, setFailure] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,6 +49,26 @@ const ArticleComments = () => {
         setErr(err.message);
       });
   }, [article_id]);
+
+  const handleDelete = (commentId) => {
+    deleteCommentById(commentId)
+      .then(() => {
+        setArticleComments((currComments) => {
+          const newComments = currComments.filter(
+            (comment) => comment.comment_id !== commentId
+          );
+          return newComments;
+        });
+        setSuccess(true);
+        setMessage("Comment Deleted 🗑️");
+      })
+      .catch((err) => {
+        setFailure(true);
+        setMessage("Something went wrong");
+      });
+    setSuccess(false);
+    setFailure(false);
+  };
 
   return (
     <>
@@ -108,12 +133,29 @@ const ArticleComments = () => {
                           </Typography>
                         </Item>
                       </Grid>
+                      {loginUser?.username === comment.author && (
+                        <Grid item xs>
+                          <Item>
+                            <Button
+                              endIcon={<DeleteIcon sx={{ color: "red" }} />}
+                              onClick={() => handleDelete(comment.comment_id)}
+                              component={motion.button}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              Delete
+                            </Button>
+                          </Item>
+                        </Grid>
+                      )}
                     </Grid>
                   </CardContent>
                 </Card>
               );
             })}
           </section>
+          {success && <PopUpMessage message={message} />}
+          {failure && <PopUpMessage message={message} failure={failure} />}
         </>
       )}
     </>
