@@ -4,12 +4,7 @@ const UserContext = createContext(null);
 
 export const UserContextProvider = (props) => {
   const [users, setUsers] = useState([]);
-  const [loginUser, setLoginUser] = useState({
-    username: "jessjelly",
-    name: "Jess Jelly",
-    avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
-  });
+  const [loginUser, setLoginUser] = useState(null);
   const [err, setErr] = useState(null);
 
   useEffect(() => {
