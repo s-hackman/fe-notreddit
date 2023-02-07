@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getArticleById } from "../../utils/api.js";
+import { getArticleById, patchArticleVotes } from "../../utils/api.js";
 import Error from "../Error";
 import {
   Card,
@@ -17,12 +17,17 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
 import { motion } from "framer-motion";
 import ArticleComments from "./comments/ArticleComments.jsx";
+import PopUpMessage from "../layout/PopUpMessage.jsx";
 
 const ArticlePage = () => {
   const [articleInfo, setArticleInfo] = useState([]);
   const [err, setErr] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { article_id } = useParams();
+  const [votes, setVotes] = useState(0);
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [failure, setFailure] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,6 +40,28 @@ const ArticlePage = () => {
         setErr(err.message);
       });
   }, [article_id]);
+
+  const updateVotes = (inc_votes) => {
+    setVotes(votes + inc_votes);
+    setErr(null);
+    patchArticleVotes(article_id, inc_votes)
+      .then((article) => {
+        setSuccess(true);
+        if (inc_votes > 0) {
+          setMessage("You Upvoted the Article! 👍");
+        } else {
+          setMessage("You Downvoted the Article! 👎");
+        }
+        setArticleInfo(article);
+      })
+      .catch((err) => {
+        setFailure(true);
+        setMessage("Something went wrong");
+        setVotes(votes - inc_votes);
+      });
+    setSuccess(false);
+    setFailure(false);
+  };
 
   return (
     <>
@@ -73,6 +100,9 @@ const ArticlePage = () => {
                 component={motion.button}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  updateVotes(1);
+                }}
               >
                 <ThumbUpIcon sx={{ paddingRight: 1 }} />
                 Like
@@ -83,11 +113,16 @@ const ArticlePage = () => {
                 component={motion.button}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  updateVotes(-1);
+                }}
               >
                 <ThumbDownIcon sx={{ paddingRight: 1 }} /> Dislike
               </Button>
             </CardActions>
           </Card>
+          {success && <PopUpMessage message={message} />}
+          {failure && <PopUpMessage message={message} failure={failure} />}
           <ArticleComments />
         </section>
       )}

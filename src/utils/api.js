@@ -21,6 +21,16 @@ export const getArticleById = (article_id) => {
   });
 };
 
+export const patchArticleVotes = (article_id, inc_votes) => {
+  return baseApi
+    .patch(`/articles/${article_id} `, {
+      inc_votes,
+    })
+    .then((res) => {
+      return res.data.article;
+    });
+};
+
 //Comments
 export const getArticleComments = (article_id) => {
   return baseApi.get(`/articles/${article_id}/comments`).then((res) => {
