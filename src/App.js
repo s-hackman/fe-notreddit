@@ -5,6 +5,8 @@ import "./App.css";
 import ArticlePage from "./components/articles/ArticlePage";
 import Error from "./components/Error";
 import { UserContextProvider } from "./context/usercontext";
+import Topics from "./components/topics/Topics";
+import TopicArticle from "./components/topics/TopicArticle";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path="/" element={<ArticleList />} />
             <Route path="/articles" element={<ArticleList />} />
             <Route path="/articles/:article_id" element={<ArticlePage />} />
+            <Route path="/topics" element={<Topics />} />
+            <Route path="/topics/:slug" element={<TopicArticle />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </div>

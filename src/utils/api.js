@@ -31,6 +31,16 @@ export const patchArticleVotes = (article_id, inc_votes) => {
     });
 };
 
+export const getArticlesWithTopic = (topic, order, sortBy) => {
+  return baseApi
+    .get("/articles", {
+      params: { topic, order, sort_by: sortBy },
+    })
+    .then((res) => {
+      return res.data.articles;
+    });
+};
+
 //Comments
 export const getArticleComments = (article_id) => {
   return baseApi.get(`/articles/${article_id}/comments`).then((res) => {
@@ -50,5 +60,12 @@ export const postCommentByArticleId = (article_id, username, newComment) => {
 export const getUsers = () => {
   return baseApi.get("/users").then((res) => {
     return res.data.users;
+  });
+};
+
+//Topic
+export const getTopics = () => {
+  return baseApi.get("/topics").then((res) => {
+    return res.data.topics;
   });
 };

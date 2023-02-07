@@ -44,7 +44,6 @@ const AddComment = ({ setArticleComments }) => {
         setMessage("Comment Posted 📮");
       })
       .catch((err) => {
-        console.log(err);
         setFailure(true);
         setMessage("Something went wrong");
       });
