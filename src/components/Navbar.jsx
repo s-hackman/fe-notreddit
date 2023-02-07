@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Grid, Typography, Avatar, Tooltip, Button } from "@mui/material";
 import RedditIcon from "@mui/icons-material/Reddit";
@@ -6,8 +6,10 @@ import ArticleIcon from "@mui/icons-material/Article";
 import TopicIcon from "@mui/icons-material/Topic";
 import PeopleIcon from "@mui/icons-material/People";
 import { motion, useAnimationControls } from "framer-motion";
+import UserContext from "../context/usercontext";
 
 const Navbar = () => {
+  const { loginUser } = useContext(UserContext);
   const animation = useAnimationControls();
 
   async function sequence() {
@@ -86,7 +88,13 @@ const Navbar = () => {
           <NavLink to="/users">Users</NavLink>
         </Button>
       </Tooltip>
-      <Avatar alt="avatar" src="" />
+      {loginUser && (
+        <Typography variant="p">
+          Welcome <strong>{loginUser.username}</strong>
+        </Typography>
+      )}
+
+      <Avatar alt="avatar" src={loginUser?.avatar_url} />
     </Grid>
   );
 };
