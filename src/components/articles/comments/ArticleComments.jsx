@@ -80,9 +80,12 @@ const ArticleComments = () => {
             {articleComments.map((comment) => {
               return (
                 <Card
-                  sx={{ mx: 1 }}
+                  sx={{
+                    mx: 3,
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset",
+                  }}
                   key={comment.comment_id}
-                  className="card"
                   variant="outlined"
                 >
                   <CardContent key={comment.comment_id}>

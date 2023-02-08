@@ -35,7 +35,7 @@ const Users = () => {
         height: "80vh",
       }}
     >
-      {users.map((user) => {
+      {users.map((user, time) => {
         return (
           <Grid
             item
@@ -45,6 +45,18 @@ const Users = () => {
               my: 3,
               px: 3,
               borderRadius: "5px",
+            }}
+            component={motion.div}
+            initial={{
+              opacity: 0,
+              y: 50 + time * 300,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            whileHover={{
+              scale: 1.02,
             }}
           >
             <Card>

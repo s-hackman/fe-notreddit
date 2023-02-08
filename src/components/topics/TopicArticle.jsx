@@ -38,7 +38,7 @@ const TopicArticle = () => {
           <Box sx={{ flexGrow: 1 }}>
             <AppBar
               position="static"
-              sx={{ backgroundColor: "skyblue", marginBottom: 1 }}
+              sx={{ backgroundColor: "gold", marginBottom: 1 }}
             >
               <Toolbar>
                 <Typography

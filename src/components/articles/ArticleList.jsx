@@ -36,7 +36,13 @@ const ArticleList = () => {
       {!isLoading && !err && (
         <>
           <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: "skyblue" }}>
+            <AppBar
+              position="static"
+              sx={{
+                backgroundColor: "gold",
+                marginBottom: 1,
+              }}
+            >
               <Toolbar>
                 <Typography
                   variant="h6"
