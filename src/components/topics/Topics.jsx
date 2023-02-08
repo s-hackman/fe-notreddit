@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
 import Error from "../Error";
+import LoadingProgress from "../layout/LoadingProgress";
 
 function Topics() {
   const [topics, setTopics] = useState([]);
@@ -29,7 +30,7 @@ function Topics() {
   return (
     <>
       {err && <Error />}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <Grid
           container

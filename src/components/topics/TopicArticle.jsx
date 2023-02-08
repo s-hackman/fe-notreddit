@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import TopicIcon from "@mui/icons-material/Topic";
+import LoadingProgress from "../layout/LoadingProgress";
 
 const TopicArticle = () => {
   const [articles, setArticles] = useState([]);
@@ -31,7 +32,7 @@ const TopicArticle = () => {
   return (
     <>
       {err && <Error />}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <>
           <Box sx={{ flexGrow: 1 }}>

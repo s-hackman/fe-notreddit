@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { Grid, Typography, Avatar, Tooltip, Button } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 import RedditIcon from "@mui/icons-material/Reddit";
 import ArticleIcon from "@mui/icons-material/Article";
 import TopicIcon from "@mui/icons-material/Topic";

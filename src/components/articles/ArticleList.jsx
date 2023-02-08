@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import ArticleIcon from "@mui/icons-material/Article";
 import SelectOptions from "../layout/SelectOptions";
+import LoadingProgress from "../layout/LoadingProgress";
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -31,7 +32,7 @@ const ArticleList = () => {
   return (
     <>
       {err && <Error />}
-      {isLoading && <p>Loading</p>}
+      {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <>
           <Box sx={{ flexGrow: 1 }}>
