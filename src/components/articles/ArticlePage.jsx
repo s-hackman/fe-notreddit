@@ -18,6 +18,7 @@ import ArticleComments from "./comments/ArticleComments.jsx";
 import PopUpMessage from "../layout/PopUpMessage.jsx";
 import UserContext from "../../context/usercontext.js";
 import LoadingProgress from "../layout/LoadingProgress";
+import { Link } from "react-router-dom";
 
 const ArticlePage = () => {
   const [articleInfo, setArticleInfo] = useState([]);
@@ -78,7 +79,15 @@ const ArticlePage = () => {
       {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <section className="article-container">
-          <Card sx={{ mx: 1 }} className="card" variant="outlined">
+          <Card
+            sx={{
+              mx: 3,
+              my: 1,
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset",
+            }}
+            variant="outlined"
+          >
             <CardContent key={articleInfo.article_id}>
               <Typography variant="h4">{articleInfo.title}</Typography>
               <Typography color="textSecondary">
@@ -96,9 +105,11 @@ const ArticlePage = () => {
                   <ThumbsUpDownIcon align="left" sx={{ paddingRight: 1 }} />
                   {articleInfo.votes} Upvotes
                 </Typography>
-                <Typography color="textSecondary">
-                  <TopicIcon />
-                  {`${articleInfo.topic}`}
+                <Typography>
+                  <Link to={`/topics/${articleInfo.topic}`}>
+                    <TopicIcon />
+                    {` ${articleInfo.topic}`}
+                  </Link>
                 </Typography>
               </Grid>
             </CardContent>
