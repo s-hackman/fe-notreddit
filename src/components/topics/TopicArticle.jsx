@@ -2,14 +2,18 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getArticlesWithTopic } from "../../utils/api";
 import Error from "../Error";
-import ArticleListItem from "../articles/ArticleListItem";
-import Stack from "@mui/system/Stack";
 import SelectOptions from "../layout/SelectOptions";
+import ArticleListItem from "../articles/ArticleListItem";
+import { Stack } from "@mui/system";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import TopicIcon from "@mui/icons-material/Topic";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import errorImage from "../../assets/errorImage.png";
+import { getTopics } from "../../utils/api";
 import LoadingProgress from "../layout/LoadingProgress";
 
 const TopicArticle = () => {
@@ -19,6 +23,23 @@ const TopicArticle = () => {
   const [sortBy, setSortBy] = useState("created_at");
   const [order, setSortOrder] = useState("desc");
   const { slug } = useParams();
+  const [slugArr, setSlugArr] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTopics()
+      .then((topic) => {
+        let tempSlugs = [];
+        topic.map((slug) => {
+          tempSlugs.push(slug.slug);
+        });
+        setSlugArr(tempSlugs);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setErr(err.message);
+      });
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,14 +48,17 @@ const TopicArticle = () => {
         setArticles(articles);
         setIsLoading(false);
       })
-      .catch((err) => setErr(err.message));
+      .catch((err) => {
+        setErr(err.message);
+      });
   }, [slug, sortBy, order]);
+
   return (
     <>
       {err && <Error />}
       {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
-        <>
+        <div>
           <Box sx={{ flexGrow: 1 }}>
             <AppBar
               position="static"
@@ -48,6 +72,7 @@ const TopicArticle = () => {
                 >
                   <TopicIcon edge="start" />
                   {slug}
+                  {!slugArr.includes(slug) && <> Topic not Found ❌</>}
                 </Typography>
                 <SelectOptions
                   sortBy={sortBy}
@@ -61,6 +86,31 @@ const TopicArticle = () => {
               </Toolbar>
             </AppBar>
           </Box>
+          {!slugArr.includes(slug) && (
+            <Card
+              sx={{
+                boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
+                m: 3,
+                p: 3,
+                borderRadius: 3,
+              }}
+            >
+              <Typography variant="h3" component="div" sx={{ color: "black" }}>
+                Sorry, there aren't any topics on notreddit with that name.
+              </Typography>
+              <Typography variant="h6" sx={{ color: "grey" }}>
+                This topic may have been banned or the topic name is incorrect.
+              </Typography>
+              <CardMedia
+                sx={{
+                  maxWidth: "50vw",
+                }}
+                component="img"
+                image={errorImage}
+                alt="error"
+              />
+            </Card>
+          )}
           <Stack className="articles-container" sx={{ px: 2 }}>
             {articles.map((article, time) => (
               <ArticleListItem
@@ -71,7 +121,7 @@ const TopicArticle = () => {
               />
             ))}
           </Stack>
-        </>
+        </div>
       )}
     </>
   );
