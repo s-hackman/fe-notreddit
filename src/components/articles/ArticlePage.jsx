@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import ArticleComments from "./comments/ArticleComments.jsx";
 import PopUpMessage from "../layout/PopUpMessage.jsx";
 import UserContext from "../../context/usercontext.js";
+import LoadingProgress from "../layout/LoadingProgress";
 
 const ArticlePage = () => {
   const [articleInfo, setArticleInfo] = useState([]);
@@ -74,7 +75,7 @@ const ArticlePage = () => {
   return (
     <>
       {err && <Error />}
-      {isLoading && <p>Loading</p>}
+      {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <section className="article-container">
           <Card sx={{ mx: 1 }} className="card" variant="outlined">

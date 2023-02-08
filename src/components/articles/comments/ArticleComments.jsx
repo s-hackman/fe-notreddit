@@ -3,14 +3,12 @@ import UserContext from "../../../context/usercontext.js";
 import { useParams } from "react-router-dom";
 import { getArticleComments, deleteCommentById } from "../../../utils/api.js";
 import Error from "../../Error.jsx";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Paper,
-  Button,
-} from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
 import { styled } from "@mui/material/styles";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -19,6 +17,7 @@ import { motion } from "framer-motion";
 import AddComment from "./AddComment.jsx";
 import PopUpMessage from "../../layout/PopUpMessage";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LoadingProgress from "../../layout/LoadingProgress";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -73,7 +72,7 @@ const ArticleComments = () => {
   return (
     <>
       {err && <Error />}
-      {isLoading && <p>Loading</p>}
+      {isLoading && <LoadingProgress />}
       {!isLoading && !err && (
         <>
           {loginUser && <AddComment setArticleComments={setArticleComments} />}
