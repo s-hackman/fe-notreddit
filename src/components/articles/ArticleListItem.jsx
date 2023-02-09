@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,8 +9,42 @@ import ForumIcon from "@mui/icons-material/Forum";
 import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
 import TopicIcon from "@mui/icons-material/Topic";
 import { motion } from "framer-motion";
+import { deleteArticle } from "../../utils/api";
+import UserContext from "../../context/usercontext";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const ArticleListItem = ({ article, time }) => {
+const ArticleListItem = ({
+  article,
+  setArticles,
+  time,
+  setFailure,
+  setMessage,
+  setSuccess,
+}) => {
+  const { loginUser } = useContext(UserContext);
+
+  const handleDelete = (article_id) => {
+    deleteArticle(article_id)
+      .then((res) => {
+        if (res === 204) {
+          setSuccess(true);
+          setMessage("You deleted the Article 🗑️");
+          setArticles((currArticles) => {
+            const newArticles = currArticles.filter(
+              (article) => article.article_id !== article_id
+            );
+            return [...newArticles];
+          });
+        }
+      })
+      .catch((err) => {
+        setFailure(true);
+        setMessage("Something went wrong");
+      });
+    setSuccess(false);
+    setFailure(false);
+  };
+
   return (
     <Card
       sx={{
@@ -65,6 +99,19 @@ const ArticleListItem = ({ article, time }) => {
             Comments
           </Link>
         </Button>
+        {loginUser?.username === article.author && (
+          <Button
+            variant="outlined"
+            color="warning"
+            startIcon={<DeleteIcon sx={{ color: "red" }} />}
+            component={motion.button}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => handleDelete(article.article_id)}
+          >
+            Delete Article
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
