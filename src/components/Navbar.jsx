@@ -124,6 +124,19 @@ const Navbar = () => {
         </Button>
       </Tooltip>
       {loginUser && (
+        <Tooltip title="Posts" placement="top-end">
+          <Button
+            variant="outlined"
+            startIcon={<PeopleIcon />}
+            component={motion.button}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <NavLink to="/Posts">Posts</NavLink>
+          </Button>
+        </Tooltip>
+      )}
+      {loginUser && (
         <Typography variant="p">
           Welcome <strong>{loginUser.username}</strong>
         </Typography>
