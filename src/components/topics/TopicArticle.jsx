@@ -23,23 +23,20 @@ const TopicArticle = () => {
   const [sortBy, setSortBy] = useState("created_at");
   const [order, setSortOrder] = useState("desc");
   const { slug } = useParams();
-  const [slugArr, setSlugArr] = useState([]);
+  const [slugExist, setSlugExist] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     getTopics()
       .then((topic) => {
-        let tempSlugs = [];
-        topic.map((slug) => {
-          tempSlugs.push(slug.slug);
-        });
-        setSlugArr(tempSlugs);
+        let tempSlugs = topic.map((topicSlug) => topicSlug.slug);
+        setSlugExist(tempSlugs.includes(slug));
         setIsLoading(false);
       })
       .catch((err) => {
         setErr(err.message);
       });
-  }, []);
+  }, [slug]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -62,7 +59,12 @@ const TopicArticle = () => {
           <Box sx={{ flexGrow: 1 }}>
             <AppBar
               position="static"
-              sx={{ backgroundColor: "gold", marginBottom: 1 }}
+              sx={{
+                backgroundColor: "gold",
+                marginBottom: 1,
+                boxShadow:
+                  "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+              }}
             >
               <Toolbar>
                 <Typography
@@ -72,7 +74,7 @@ const TopicArticle = () => {
                 >
                   <TopicIcon edge="start" />
                   {slug}
-                  {!slugArr.includes(slug) && <> Topic not Found ❌</>}
+                  {!slugExist && <> Topic not Found ❌</>}
                 </Typography>
                 <SelectOptions
                   sortBy={sortBy}
@@ -86,7 +88,7 @@ const TopicArticle = () => {
               </Toolbar>
             </AppBar>
           </Box>
-          {!slugArr.includes(slug) && (
+          {!slugExist && (
             <Card
               sx={{
                 boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
