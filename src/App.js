@@ -8,6 +8,7 @@ import { UserContextProvider } from "./context/usercontext";
 import Topics from "./components/topics/Topics";
 import TopicArticle from "./components/topics/TopicArticle";
 import Users from "./components/users/Users";
+import Posts from "./components/posts/Posts";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/topics" element={<Topics />} />
             <Route path="/topics/:slug" element={<TopicArticle />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/posts" element={<Posts />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </div>

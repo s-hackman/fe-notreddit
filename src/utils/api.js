@@ -41,6 +41,14 @@ export const getArticlesWithTopic = (topic, order, sortBy) => {
     });
 };
 
+export const postArticle = (author, title, body, topic, article_img_url) => {
+  return baseApi
+    .post("/articles", { author, title, body, topic, article_img_url })
+    .then((res) => {
+      return res.data.article;
+    });
+};
+
 //Comments
 export const getArticleComments = (article_id) => {
   return baseApi.get(`/articles/${article_id}/comments`).then((res) => {
@@ -73,5 +81,11 @@ export const getUsers = () => {
 export const getTopics = () => {
   return baseApi.get("/topics").then((res) => {
     return res.data.topics;
+  });
+};
+
+export const postTopic = (slug, description) => {
+  return baseApi.post("/topics", { slug, description }).then((res) => {
+    return res.data.topic;
   });
 };
