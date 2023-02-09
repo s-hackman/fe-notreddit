@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import UserContext from "../../../context/usercontext.js";
 import { useParams } from "react-router-dom";
-import { getArticleComments, deleteCommentById } from "../../../utils/api.js";
+import {
+  getArticleComments,
+  deleteCommentById,
+  patchCommentVotes,
+} from "../../../utils/api.js";
 import Error from "../../Error.jsx";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -36,6 +40,7 @@ const ArticleComments = () => {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
   const [failure, setFailure] = useState(false);
+  const [votes, setVotes] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -67,6 +72,41 @@ const ArticleComments = () => {
       });
     setSuccess(false);
     setFailure(false);
+  };
+
+  const updateVotes = (comment_id, inc_votes) => {
+    if (loginUser) {
+      setVotes(votes + inc_votes);
+      patchCommentVotes(comment_id, inc_votes)
+        .then((commentRes) => {
+          setVotes(0);
+          setSuccess(true);
+          if (inc_votes > 0) {
+            setMessage("You Upvoted the Comment! 👍");
+          } else {
+            setMessage("You Downvoted the Comment! 👎");
+          }
+          setArticleComments((currComments) => {
+            const newComments = currComments.filter(
+              (comment) => comment.comment_id !== comment_id
+            );
+            return [commentRes, ...newComments];
+          });
+        })
+        .catch((err) => {
+          setVotes(0);
+          setFailure(true);
+          setMessage("Something went wrong");
+        });
+      setSuccess(false);
+      setFailure(false);
+    } else {
+      setFailure(true);
+      setMessage("Please login to Vote");
+      setTimeout(() => {
+        setFailure(false);
+      }, 3000);
+    }
   };
 
   return (
@@ -108,6 +148,9 @@ const ArticleComments = () => {
                             component={motion.button}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
+                            onClick={() => {
+                              updateVotes(comment.comment_id, 1);
+                            }}
                           >
                             <ThumbUpIcon />
                           </Button>
@@ -117,6 +160,9 @@ const ArticleComments = () => {
                             component={motion.button}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
+                            onClick={() => {
+                              updateVotes(comment.comment_id, -1);
+                            }}
                           >
                             <ThumbDownIcon />
                           </Button>
