@@ -15,6 +15,7 @@ import CardMedia from "@mui/material/CardMedia";
 import errorImage from "../../assets/errorImage.png";
 import { getTopics } from "../../utils/api";
 import LoadingProgress from "../layout/LoadingProgress";
+import PopUpMessage from "../layout/PopUpMessage";
 
 const TopicArticle = () => {
   const [articles, setArticles] = useState([]);
@@ -24,6 +25,9 @@ const TopicArticle = () => {
   const [order, setSortOrder] = useState("desc");
   const { slug } = useParams();
   const [slugExist, setSlugExist] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [failure, setFailure] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -120,11 +124,17 @@ const TopicArticle = () => {
                 article={article}
                 setArticles={setArticles}
                 time={time}
+                message={message}
+                setMessage={setMessage}
+                setFailure={setFailure}
+                setSuccess={setSuccess}
               />
             ))}
           </Stack>
         </div>
       )}
+      {success && <PopUpMessage message={message} />}
+      {failure && <PopUpMessage message={message} failure={failure} />}
     </>
   );
 };

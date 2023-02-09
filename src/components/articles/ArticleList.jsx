@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import ArticleIcon from "@mui/icons-material/Article";
 import SelectOptions from "../layout/SelectOptions";
 import LoadingProgress from "../layout/LoadingProgress";
+import PopUpMessage from "../layout/PopUpMessage";
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -17,6 +18,9 @@ const ArticleList = () => {
   const [err, setErr] = useState(null);
   const [sortBy, setSortBy] = useState("created_at");
   const [order, setSortOrder] = useState("desc");
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+  const [failure, setFailure] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -70,11 +74,17 @@ const ArticleList = () => {
                 article={article}
                 setArticles={setArticles}
                 time={time}
+                message={message}
+                setMessage={setMessage}
+                setFailure={setFailure}
+                setSuccess={setSuccess}
               />
             ))}
           </Stack>
         </>
       )}
+      {success && <PopUpMessage message={message} />}
+      {failure && <PopUpMessage message={message} failure={failure} />}
     </>
   );
 };

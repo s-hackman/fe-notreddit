@@ -49,6 +49,12 @@ export const postArticle = (author, title, body, topic, article_img_url) => {
     });
 };
 
+export const deleteArticle = (article_id) => {
+  return baseApi.delete(`/articles/${article_id}`).then((res) => {
+    return res.status;
+  });
+};
+
 //Comments
 export const getArticleComments = (article_id) => {
   return baseApi.get(`/articles/${article_id}/comments`).then((res) => {
