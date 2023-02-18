@@ -9,6 +9,7 @@ import Topics from "./components/topics/Topics";
 import TopicArticle from "./components/topics/TopicArticle";
 import Users from "./components/users/Users";
 import Posts from "./components/posts/Posts";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/" element={<ArticleList />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/articles" element={<ArticleList />} />
             <Route path="/articles/:article_id" element={<ArticlePage />} />
             <Route path="/topics" element={<Topics />} />

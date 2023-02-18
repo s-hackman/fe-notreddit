@@ -88,7 +88,9 @@ const Navbar = () => {
           onTap={sequence}
           animate={animation}
         />
-        <strong>notreddit</strong>
+        <NavLink to="/" style={{ color: "black", textDecoration: "none" }}>
+          <strong>notreddit</strong>
+        </NavLink>
       </Typography>
       <Tooltip title="Articles" placement="top-start">
         <Button
