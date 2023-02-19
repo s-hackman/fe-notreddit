@@ -13,6 +13,9 @@ import { motion, useAnimationControls } from "framer-motion";
 import UserContext from "../context/usercontext";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
+import useMediaQuery from "../hooks/useMediaQuery";
+import TemporaryDrawer from "./TemporaryDrawer";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -46,6 +49,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const Navbar = () => {
   const { loginUser } = useContext(UserContext);
   const animation = useAnimationControls();
+  const isDesktop = useMediaQuery("(min-width: 840px)");
 
   async function sequence() {
     await animation.start({ rotate: 360 });
@@ -92,75 +96,83 @@ const Navbar = () => {
           <strong>notreddit</strong>
         </NavLink>
       </Typography>
-      <Tooltip title="Articles" placement="top-start">
-        <Button
-          variant="outlined"
-          startIcon={<ArticleIcon />}
-          component={motion.button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <NavLink to="/articles">Articles</NavLink>
-        </Button>
-      </Tooltip>
-      <Tooltip title="Topics" placement="top">
-        <Button
-          variant="outlined"
-          startIcon={<TopicIcon />}
-          component={motion.button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <NavLink to="/topics">Topics</NavLink>
-        </Button>
-      </Tooltip>
-      <Tooltip title="Users" placement="top-end">
-        <Button
-          variant="outlined"
-          startIcon={<PeopleIcon />}
-          component={motion.button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <NavLink to="/users">Users</NavLink>
-        </Button>
-      </Tooltip>
-      {loginUser && (
-        <Tooltip title="Posts" placement="top-end">
-          <Button
-            variant="outlined"
-            startIcon={<PeopleIcon />}
-            component={motion.button}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <NavLink to="/Posts">Posts</NavLink>
-          </Button>
-        </Tooltip>
-      )}
-      {loginUser && (
-        <Typography variant="p">
-          Welcome <strong>{loginUser.username}</strong>
-        </Typography>
-      )}
-      {loginUser ? (
-        <StyledBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          variant="dot"
-        >
-          <Avatar
-            alt="avatar"
-            src={loginUser?.avatar_url}
-            sx={{ border: "1px solid white" }}
-          />
-        </StyledBadge>
+
+      {/* DESKTOP NAV or MOBILE NAV*/}
+      {isDesktop ? (
+        <>
+          <Tooltip title="Articles" placement="top-start">
+            <Button
+              variant="outlined"
+              startIcon={<ArticleIcon />}
+              component={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <NavLink to="/articles">Articles</NavLink>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Topics" placement="top">
+            <Button
+              variant="outlined"
+              startIcon={<TopicIcon />}
+              component={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <NavLink to="/topics">Topics</NavLink>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Users" placement="top-end">
+            <Button
+              variant="outlined"
+              startIcon={<PeopleIcon />}
+              component={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <NavLink to="/users">Users</NavLink>
+            </Button>
+          </Tooltip>
+          {loginUser && (
+            <Tooltip title="Posts" placement="top-end">
+              <Button
+                variant="outlined"
+                startIcon={<UploadFileIcon />}
+                component={motion.button}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <NavLink to="/Posts">Posts</NavLink>
+              </Button>
+            </Tooltip>
+          )}
+          {loginUser && (
+            <Typography variant="p">
+              Welcome <strong>{loginUser.username}</strong>
+            </Typography>
+          )}
+          {loginUser ? (
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar
+                alt="avatar"
+                src={loginUser?.avatar_url}
+                sx={{ border: "1px solid white" }}
+              />
+            </StyledBadge>
+          ) : (
+            <Avatar
+              alt="avatar"
+              src={loginUser?.avatar_url}
+              sx={{ border: "1px solid white" }}
+            />
+          )}
+        </>
       ) : (
-        <Avatar
-          alt="avatar"
-          src={loginUser?.avatar_url}
-          sx={{ border: "1px solid white" }}
-        />
+        <TemporaryDrawer />
       )}
     </Grid>
   );
